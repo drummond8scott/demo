@@ -21,7 +21,7 @@ vars:
   tuva_chronic_conditions_enabled: true
   hcc_recapture_enabled: true
   hcc_suspecting_enabled: true
-  quality_measures_enabled: false
+  quality_measures_enabled: true
 
   # off: package default false, out of scope
   fhir_preprocessing_enabled: false
