@@ -5,10 +5,27 @@ config-version: 2
 profile: default
 
 vars:
-
   claims_enabled: true
   clinical_enabled: true
   provider_attribution_enabled: true
+
+  # per-mart switches, explicit for readability
+  ccsr_enabled: true
+  claims_preprocessing_enabled: true
+  cms_chronic_conditions_enabled: true
+  cms_hcc_enabled: true
+  ed_classification_enabled: true
+  financial_pmpm_enabled: true
+  insights_enabled: true  
+  readmissions_enabled: true
+  tuva_chronic_conditions_enabled: true
+  hcc_recapture_enabled: true
+  hcc_suspecting_enabled: true
+  quality_measures_enabled: false
+
+  # off: package default false, out of scope
+  fhir_preprocessing_enabled: false
+ 
 
   ## CMS HCC data mart vars
   # Setting the payment year to year needed for the demo data
@@ -30,10 +47,14 @@ clean-targets:
   - "dbt_packages"
 
 models:
+  elementary:
+    +enabled: false
   the_tuva_project:
     input_layer:
       input_layer__provider_attribution:
         +enabled: false
+    data_quality:
+      +enabled: false
 
 seeds:
   the_tuva_project_demo:
