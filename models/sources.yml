@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: input_seeds
+    description: >
+      The seed handoff consumed by this project, standing in for the SDE's
+      bronze layer. Eight populated tables. Rows are loaded by package
+      post-hooks from Tuva's public synthetic data bucket at build time.
+    database: learn_tuva
+    schema: input_layer
+    tables:
+      - name: medical_claim
+      - name: pharmacy_claim
+      - name: eligibility
+      - name: appointment
+      - name: immunization
+      - name: lab_result
+      - name: observation
+      - name: provider_attribution_source
