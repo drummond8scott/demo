@@ -2,62 +2,58 @@ version: 2
 
 sources:
   - name: input_seeds
+    description: The eight populated input tables consumed by this project. Contracts in docs/contracts/.
     database: learn_tuva
     schema: input_layer
     tables:
 
       - name: medical_claim
         description: >
-          Claim-line grain. Verified 2026-08-15: (claim_id, claim_line_number, data_source)
-          is unique. NO dense natural key exists at line grain; professional lines with
-          charge_amount = 0 are identical on every business column and differ only by claim_id.
-          Density profile 2026-08-15: line_start/line_end/allowed/pos null on 34,521 rows
-          (institutional lines); header dates, charge_amount, payer, data_source fully dense.
+          Claim-line grain. Key (claim_id, claim_line_number, data_source). No natural key at line grain
+          (measured 2026-08-15). Line dates null iff institutional. See docs/contracts/medical-claim.md.
         tests:
-          # Sentinel A: technical grain, the package's declared key
           - dbt_utils.unique_combination_of_columns:
-              combination_of_columns:
-                - claim_id
-                - claim_line_number
-                - data_source
-              config:
-                severity: error
-                tags: [sentinel, sentinel_a]
-          # Sentinel B (natural key) DROPPED per B2.2 measurement. Replaced by Sentinel D below.
+              combination_of_columns: [claim_id, claim_line_number, data_source]
+              config: {severity: error, tags: [sentinel, sentinel_a]}
         columns:
           - name: claim_id
-            tests:
-              - not_null:
-                  config: {tags: [sentinel]}
+            tests: [{not_null: {config: {tags: [sentinel]}}}]
           - name: member_id
-            tests:
-              - not_null:
-                  config: {tags: [sentinel]}
+            tests: [{not_null: {config: {tags: [sentinel]}}}]
 
       - name: eligibility
-        description: Enrollment-span grain per member per payer/plan.
+        description: >
+          Enrollment-span grain. Natural key (member_id, enrollment_start_date, payer, plan) exists.
+          No open spans in this dataset. See docs/contracts/eligibility.md.
         tests:
           - dbt_utils.unique_combination_of_columns:
-              combination_of_columns:
-                - person_id
-                - member_id
-                - enrollment_start_date
-                - enrollment_end_date
-                - plan
-                - payer
-                - data_source
-              config:
-                severity: error
-                tags: [sentinel, sentinel_a]
+              combination_of_columns: [person_id, member_id, enrollment_start_date, enrollment_end_date, plan, payer, data_source]
+              config: {severity: error, tags: [sentinel, sentinel_a]}
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns: [member_id, enrollment_start_date, payer, plan]
+              config: {severity: error, tags: [sentinel, sentinel_b]}
         columns:
           - name: member_id
+            tests: [{not_null: {config: {tags: [sentinel]}}}]
+          - name: enrollment_start_date
+            tests: [{not_null: {config: {tags: [sentinel]}}}]
+          - name: enrollment_end_date
+            tests: [{not_null: {config: {tags: [sentinel]}}}]
+
+      - name: observation
+        description: >
+          One row per observation, observation_id unique. Natural key nearly unique (8 known duplicate
+          groups, vitals). source_units present iff result numeric. See docs/contracts/observation.md.
+        columns:
+          - name: observation_id
             tests:
-              - not_null:
-                  config: {tags: [sentinel]}
+              - unique: {config: {severity: error, tags: [sentinel, sentinel_a]}}
+              - not_null: {config: {tags: [sentinel]}}
+          - name: person_id
+            tests: [{not_null: {config: {tags: [sentinel]}}}]
 
       - name: pharmacy_claim
       - name: appointment
       - name: immunization
       - name: lab_result
-      - name: observation
       - name: provider_attribution_source
