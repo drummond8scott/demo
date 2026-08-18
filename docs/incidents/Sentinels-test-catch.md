@@ -1,0 +1,21 @@
+20:55:29  1 of 8 START test dbt_utils_source_unique_combination_of_columns_input_seeds_eligibility_person_id__member_id__enrollment_start_date__enrollment_end_date__plan__payer__data_source  [RUN]
+20:55:29  2 of 8 START test dbt_utils_source_unique_combination_of_columns_input_seeds_medical_claim_claim_id__claim_line_number__data_source  [RUN]
+20:55:29  3 of 8 START test sentinel_c_medical_claim_volume .............................. [RUN]
+20:55:29  4 of 8 START test sentinel_d_medical_claim_identity ............................ [RUN]
+20:55:29  5 of 8 START test sentinel_e_medical_claim_line_dates .......................... [RUN]
+20:55:29  6 of 8 START test source_not_null_input_seeds_eligibility_member_id ............ [RUN]
+20:55:29  7 of 8 START test source_not_null_input_seeds_medical_claim_claim_id ........... [RUN]
+20:55:29  8 of 8 START test source_not_null_input_seeds_medical_claim_member_id .......... [RUN]
+20:55:29  3 of 8 FAIL 1 sentinel_c_medical_claim_volume .................................. [FAIL 1 in 0.44s]
+20:55:29  6 of 8 PASS source_not_null_input_seeds_eligibility_member_id .................. [PASS in 0.44s]
+20:55:29  8 of 8 PASS source_not_null_input_seeds_medical_claim_member_id ................ [PASS in 0.46s]
+20:55:29  4 of 8 FAIL 1 sentinel_d_medical_claim_identity ................................ [FAIL 1 in 0.46s]
+20:55:29  5 of 8 PASS sentinel_e_medical_claim_line_dates ................................ [PASS in 0.47s]
+20:55:29  7 of 8 PASS source_not_null_input_seeds_medical_claim_claim_id ................. [PASS in 0.48s]
+20:55:29  1 of 8 PASS dbt_utils_source_unique_combination_of_columns_input_seeds_eligibility_person_id__member_id__enrollment_start_date__enrollment_end_date__plan__payer__data_source  [PASS in 0.49s]
+20:55:29  2 of 8 PASS dbt_utils_source_unique_combination_of_columns_input_seeds_medical_claim_claim_id__claim_line_number__data_source  [PASS in 0.49s]
+20:55:29  
+20:55:29  1 of 1 START hook: the_tuva_project.on-run-end.0 ............................... [RUN]
+20:55:29  1 of 1 OK hook: the_tuva_project.on-run-end.0 .................................. [OK in 0.00s]
+20:55:30  
+20:55:30  Finished running 2 project hooks, 8 data tests in 0 hours 0 minutes and 3.53 seconds (3.53s).
