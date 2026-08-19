@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: dim_patient_current
+    description: >
+      One row per person, current attributes. Owner: Scott Drummond. v1.
+    columns:
+      - name: person_id
+        description: "Unique person identifier."
+        tests:
+          - unique:
+              config: {tags: [portfolio]}
+          - not_null:
+              config: {tags: [portfolio]}
+
+  - name: fct_member_months
+    description: >
+      One row per person per payer per plan per year_month of eligibility.
+      Metric definition, member month: a person enrolled with a payer/plan for any part of a calendar month
+      counts once for that payer/plan/month. Owner: Scott Drummond. v1.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [person_id, member_id, year_month, payer, plan, data_source]
+          config: {tags: [portfolio]}
+
+  - name: fct_ed_visits
+    description: >
+      One row per emergency department encounter. Metric definition, ED visit rate: ED encounters
+      per 1,000 member months in the same year_month. Owner: Scott Drummond. v1.
+    columns:
+      - name: encounter_id
+        tests:
+          - unique:
+              config: {tags: [portfolio]}
+          - not_null:
+              config: {tags: [portfolio]}
+
+  - name: fct_readmissions
+    description: >
+      One row per index inpatient encounter with its readmission outcome. Metric definition,
+      30-day readmission rate: readmit_30_flag among index admissions. Owner: Scott Drummond. v1.
+    columns:
+      - name: encounter_id
+        tests:
+          - unique:
+              config: {tags: [portfolio]}
+          - not_null:
+              config: {tags: [portfolio]}
